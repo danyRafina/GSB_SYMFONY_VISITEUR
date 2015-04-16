@@ -89,7 +89,7 @@ class __TwigTemplate_374aa0f5bb129f62e0073fc63e0e98565a201c779b9dd313dcf504f9fa2
         </fieldset>
              <fieldset>
                     <legend>Frais hors forfait : </legend>
-                    <table border='1' >
+                    <table border='1' style='width: 50%;text-align: center'>
                         <tr>
                             <th>date </th>
                             <th> Libéllé</th>
@@ -102,12 +102,13 @@ class __TwigTemplate_374aa0f5bb129f62e0073fc63e0e98565a201c779b9dd313dcf504f9fa2
         // line 62
         $context['_parent'] = (array) $context;
         $context['_seq'] = twig_ensure_traversable((isset($context["fhf"]) ? $context["fhf"] : $this->getContext($context, "fhf")));
+        $context['_iterated'] = false;
         foreach ($context['_seq'] as $context["_key"] => $context["item"]) {
             // line 63
             echo "                            <tr>
                                 <td> ";
             // line 64
-            echo twig_escape_filter($this->env, $this->getAttribute((isset($context["item"]) ? $context["item"] : $this->getContext($context, "item")), "date", array(), "array"), "html", null, true);
+            echo twig_escape_filter($this->env, twig_date_format_filter($this->env, $this->getAttribute((isset($context["item"]) ? $context["item"] : $this->getContext($context, "item")), "date", array(), "array"), "d-m-Y"), "html", null, true);
             echo "</td>
                                 <td> ";
             // line 65
@@ -118,42 +119,48 @@ class __TwigTemplate_374aa0f5bb129f62e0073fc63e0e98565a201c779b9dd313dcf504f9fa2
             echo twig_escape_filter($this->env, $this->getAttribute((isset($context["item"]) ? $context["item"] : $this->getContext($context, "item")), "montant", array(), "array"), "html", null, true);
             echo "</td>
                                 <td> 
-                                    <table border=\"1\"> 
+                                    <table border=\"1\" style='width: 100%;text-align: center;'> 
                                         <tr>
                                             <td>
                                                 <a href=\"";
             // line 71
-            echo twig_escape_filter($this->env, $this->env->getExtension('routing')->getPath("gsb_visiteurs_mod_FhF", array("id" => $this->getAttribute((isset($context["item"]) ? $context["item"] : $this->getContext($context, "item")), "idVisiteur", array(), "array"))), "html", null, true);
-            echo "\" accesskey=\"\"title=\"Déconnexion\">Modifier</a>
+            echo twig_escape_filter($this->env, $this->env->getExtension('routing')->getPath("gsb_visiteurs_mod_FhF", array("id" => $this->getAttribute((isset($context["item"]) ? $context["item"] : $this->getContext($context, "item")), "id", array(), "array"))), "html", null, true);
+            echo "\" accesskey=\"\"title=\"Modification\">Modifier</a>
                                             </td>
                                             <td>
                                                 <a href=\"";
             // line 74
-            echo twig_escape_filter($this->env, $this->env->getExtension('routing')->getPath("gsb_visiteurs_sup_FhF", array("id" => $this->getAttribute((isset($context["item"]) ? $context["item"] : $this->getContext($context, "item")), "idVisiteur", array(), "array"))), "html", null, true);
-            echo "\" accesskey=\"\"title=\"Suppression\">Supprimer </a>
+            echo twig_escape_filter($this->env, $this->env->getExtension('routing')->getPath("gsb_visiteurs_sup_FhF", array("id" => $this->getAttribute((isset($context["item"]) ? $context["item"] : $this->getContext($context, "item")), "id", array(), "array"))), "html", null, true);
+            echo "\" onClick=\"return confirm('Voulez-vous vraiment supprimer ce frais ?  ');\" accesskey=\"\" title=\"Suppression\">Supprimer </a>
                                             </td>
                                         </tr>
                                     </table>
                                 </td>
                             <tr>
+                                ";
+            $context['_iterated'] = true;
+        }
+        if (!$context['_iterated']) {
+            // line 81
+            echo "                                <tr><td colspan=\"4\" style='text-align:center;font:18px Arial bold;'>Vous n'avez pas de frais hors forfait </td></tr>
                             ";
         }
         $_parent = $context['_parent'];
         unset($context['_seq'], $context['_iterated'], $context['_key'], $context['item'], $context['_parent'], $context['loop']);
         $context = array_intersect_key($context, $_parent) + $_parent;
-        // line 81
+        // line 83
         echo "                    </table>
                 </fieldset>
         <br/>
         <a href=\"";
-        // line 84
+        // line 86
         echo $this->env->getExtension('routing')->getPath("gsb_consultation_frais");
         echo "\" >
             Autre Fiche
         </a> 
         &nbsp;&nbsp;&nbsp;&nbsp;
         <a href = \"";
-        // line 88
+        // line 90
         echo $this->env->getExtension('routing')->getPath("gsb_homepage_visiteurs");
         echo "\"> 
             Accueil Visiteurs
@@ -215,6 +222,6 @@ class __TwigTemplate_374aa0f5bb129f62e0073fc63e0e98565a201c779b9dd313dcf504f9fa2
 
     public function getDebugInfo()
     {
-        return array (  192 => 19,  181 => 11,  177 => 10,  169 => 4,  166 => 3,  157 => 88,  150 => 84,  145 => 81,  132 => 74,  126 => 71,  118 => 66,  114 => 65,  110 => 64,  107 => 63,  103 => 62,  86 => 47,  77 => 46,  74 => 45,  70 => 44,  65 => 41,  56 => 40,  53 => 39,  49 => 38,  38 => 32,  34 => 30,  32 => 3,  29 => 2,);
+        return array (  199 => 19,  188 => 11,  184 => 10,  176 => 4,  173 => 3,  164 => 90,  157 => 86,  152 => 83,  145 => 81,  133 => 74,  127 => 71,  119 => 66,  115 => 65,  111 => 64,  108 => 63,  103 => 62,  86 => 47,  77 => 46,  74 => 45,  70 => 44,  65 => 41,  56 => 40,  53 => 39,  49 => 38,  38 => 32,  34 => 30,  32 => 3,  29 => 2,);
     }
 }

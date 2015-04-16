@@ -3,12 +3,13 @@
 namespace Ahe\gsbBundle\Controller;
 
 require_once("include/fct.inc.php");
+
 //require_once("include/class.pdogsb.inc.php");
 
 use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Doctrine\ORM\Query\ResultSetMapping;
-use Symfony\Component\HttpFoundation\Request ;
+use Symfony\Component\HttpFoundation\Request;
 
 class FraisVisiteursController extends Controller {
 
@@ -29,7 +30,6 @@ class FraisVisiteursController extends Controller {
         } else {  // Il y a au moins une fiche de frais
             if ($this->getRequest()->getMethod() == 'POST') {
                 // Traitement du formulaire 
-                //$pdo = PdoGsb::getPdoGsb();
                 $request = $this->get('request');
                 $session = $request->getSession();
                 $idVisiteur = $session->get('id');
@@ -53,15 +53,15 @@ class FraisVisiteursController extends Controller {
                 ////$query->setParameter('vis', $idVisiteur);
                 //$query->setParameter('mois',$leMois);
                 $c = $this->getDoctrine()->getConnection();
-                $query = "SELECT * FROM LigneFraisHorsForfait where mois = ?";
+                $query = "SELECT * FROM LigneFraisHorsForfait where mois = ? and idVisiteur = ?";
                 $stmt = $c->prepare($query);
-                $stmt->execute(array($leMois));
+                $stmt->execute(array($leMois, $idVisiteur));
                 $result = $stmt->fetchAll();
                 $numAnnee = substr($leMois, 0, 4);
                 $numMois = substr($leMois, 4, 2);
                 $session->set('leMois', $numMois);
                 return $this->render('AheGsbBundle:Visiteurs:consultationFraisForfait.html.twig', array('leMois' => $leMois, 'lesFraisForfait' => $lesFraisForfait,
-                            'numAnnee' => $numAnnee, 'numMois' => $numMois,'fhf'=>$result
+                            'numAnnee' => $numAnnee, 'numMois' => $numMois, 'fhf' => $result
                 ));
             }
             return $this->render('AheGsbBundle:Visiteurs:selectFraisMois.html.twig', array('listeMois' => $listeMois));
@@ -77,20 +77,26 @@ class FraisVisiteursController extends Controller {
         if ($this->estPremierFraisMois($idVisiteur, $mois)) {
             $this->creerNouvellesLignesFrais($idVisiteur, $mois);
         }
-         $form = $this->createFormBuilder()
-                ->add('libelle','text',array('label'=>'Libellé : '))
-                ->add('date','date' ,array('label'=>'Date : '))
-                 ->add('montant','number',array('label'=>'Montant :'))
+        $form = $this->createFormBuilder()
+                ->add('libelle', 'text', array('label' => 'Libellé : '))
+                ->add('date', 'date', array('label' => 'Date : '))
+                ->add('montant', 'number', array('label' => 'Montant :'))
+                ->add('Valider', 'submit')
+                ->add('Annuler', 'reset')
                 ->getForm();
-         $request1 = Request::createFromGlobals();
+        $request1 = Request::createFromGlobals();
         $request = $this->get('request');
         $lesErreursForfait = array();
         if ($this->get('request')->getMethod() == 'POST' && $form->handleRequest($request1)->isValid()) {
-            $lesFrais = $request->request->get('lesFrais');
             $libelle = $form['libelle']->getData();
             $date = $form['date']->getData();
             $montant = $form['montant']->getData();
-            $this->creerNouveauFraisHorsForfait($idVisiteur,$mois,$libelle, $date, $montant);
+            $this->creerNouveauFraisHorsForfait($idVisiteur, $mois, $libelle, $date, $montant);
+            return $this->redirect($this->generateUrl('gsb_saisie_frais_type'));
+        }
+
+        if ($this->get('request')->getMethod() == 'POST') {
+            $lesFrais = $request->request->get('lesFrais');
             if (lesQteFraisValides($lesFrais)) {
                 $this->majFraisForfait($idVisiteur, $mois, $lesFrais);
             } else {
@@ -100,23 +106,51 @@ class FraisVisiteursController extends Controller {
             return $this->redirect($this->generateUrl('gsb_saisie_frais_type'));
         }
         $lesFraisForfait = $this->getLesFraisForfait($idVisiteur, $mois);
-         $c = $this->getDoctrine()->getConnection();
-         $query = "SELECT * FROM LigneFraisHorsForfait where idVisiteur = ?";
-         $stmt = $c->prepare($query);
-         $stmt->execute(array($idVisiteur));
-         $result = $stmt->fetchAll();
+        $c = $this->getDoctrine()->getConnection();
+        $query = "SELECT * FROM LigneFraisHorsForfait where idVisiteur = ? and mois = ?";
+        $stmt = $c->prepare($query);
+        $stmt->execute(array($idVisiteur, $mois));
+        $result = $stmt->fetchAll();
         return $this->render('AheGsbBundle:Visiteurs:saisieFicheFrais.html.twig', array('lesFraisForfait' => $lesFraisForfait,
                     'nom' => $session->get('nom'), 'prenom' => $session->get('prenom'),
                     'numMois' => $numMois,
-                    'numAnnee' => $numAnnee, 'lesErreursForfait' => $lesErreursForfait,'form'=>$form->createView(),'fhf'=>$result));
+                    'numAnnee' => $numAnnee, 'lesErreursForfait' => $lesErreursForfait, 'form' => $form->createView(), 'fhf' => $result));
     }
 
     public function supFHFAction($id) {
-        return new \Symfony\Component\HttpFoundation\Response('ada');
+        $c = $this->getDoctrine()->getConnection();
+        $query = "DELETE FROM LigneFraisHorsForfait  where id = ?";
+        $stmt = $c->prepare($query);
+        $stmt->execute(array($id));
+        return $this->redirect($this->generateUrl('gsb_consultation_frais'));
     }
+
     public function modFHFAction($id) {
-        return new \Symfony\Component\HttpFoundation\Response('ada');
+        $c = $this->getDoctrine()->getConnection();
+        $query = "SELECT * FROM LigneFraisHorsForfait where id = ?";
+        $stmt = $c->prepare($query);
+        $stmt->execute(array($id));
+        $result = $stmt->fetch();
+        return $this->render('AheGsbBundle:Visiteurs:modFHF.html.twig', array('date' => $result['date'],
+                   'num'=>$result['id'],'libelle'=>$result['libelle'],'montant'=>$result['montant']
+                    ));
     }
+    
+    public function updateFHFAction() {
+        $request = $this->get('request');
+         if ($this->get('request')->getMethod() == 'POST') {
+             $c = $this->getDoctrine()->getConnection();
+            $libelle = $request->request->get('libelle');
+            $date = $request->request->get('date');
+             $montant = $request->request->get('montant');
+              $id = $request->request->get('idFHF');
+        $query = "UPDATE LigneFraisHorsForfait set libelle =  ? , date = ? , montant = ? where id = ?";
+        $stmt = $c->prepare($query);
+        $stmt->execute(array($libelle,$date,$montant,$id));
+        return $this->redirect($this->generateUrl('gsb_consultation_frais'));
+      }
+    }
+
     public function accueilVisiteursAction() {
         return $this->render('AheGsbBundle:Visiteurs:accueilVisiteur.html.twig');
     }
@@ -173,7 +207,7 @@ class FraisVisiteursController extends Controller {
     public function getLesInfosFicheFrais($idVisiteur, $mois) {
         $repo = $this->getDoctrine()->getManager()->getRepository('AheGsbBundle:FicheFrais');
         $result = $repo->findOneBy(array('idvisiteur' => $idVisiteur, 'mois' => $mois));
-       
+
         /* $req = "select FicheFrais.idEtat as idEtat, FicheFrais.dateModif as dateModif, FicheFrais.nbJustificatifs as nbJustificatifs, 
           FicheFrais.montantValide as montantValide, Etat.libelle as libEtat from  FicheFrais inner join Etat on FicheFrais.idEtat = Etat.id
           where FicheFrais.idVisiteur ='$idVisiteur' and FicheFrais.mois = '$mois'";
@@ -182,33 +216,24 @@ class FraisVisiteursController extends Controller {
         return $result;
     }
 
-    
-    	
-/**
- * Crée un nouveau frais hors forfait pour un visiteur un mois donné
- * à partir des informations fournies en paramètre
- 
- * @param $idVisiteur 
- * @param $mois sous la forme aaaamm
- * @param $libelle : le libelle du frais
- * @param $date : la date du frais au format français jj//mm/aaaa
- * @param $montant : le montant
-*/
-	public function creerNouveauFraisHorsForfait($idVisiteur,$mois,$libelle,$date,$montant){
-		//$dateFr = dateFrancaisVersAnglais($date);
-             $repository = $this->getDoctrine()->getManager()
-                ->getRepository('AheGsbBundle:FicheFrais');
-             $idVisiteurFicheFrais = $repository->findOneBy(array('idvisiteur'=>$this->getVisiteur($idVisiteur),'mois'=>$mois));
-            echo count($idVisiteurFicheFrais)." ".$idVisiteurFicheFrais->getMontantvalide();
-                $em = $this->getDoctrine()->getManager();
-                $object = new \Ahe\gsbBundle\Entity\LigneFraisHorsForfait();
-                $object->setIdVisiteur($idVisiteurFicheFrais);
-                       $object->setLibelle($libelle)
-                        ->setMontant($montant)
-                        ->setDate($date);
-                $em->persist($object);
-                $em->flush();
-	}
+    /**
+     * Crée un nouveau frais hors forfait pour un visiteur un mois donné
+     * à partir des informations fournies en paramètre
+
+     * @param $idVisiteur 
+     * @param $mois sous la forme aaaamm
+     * @param $libelle : le libelle du frais
+     * @param $date : la date du frais au format français jj//mm/aaaa
+     * @param $montant : le montant
+     */
+    public function creerNouveauFraisHorsForfait($idVisiteur, $mois, $libelle, $date, $montant) {
+        //$dateFr = dateFrancaisVersAnglais($date);
+        $c = $this->getDoctrine()->getConnection();
+        $query = "INSERT INTO LigneFraisHorsForfait values(?,?,?,?,?,?)";
+        $stmt = $c->prepare($query);
+        $stmt->execute(array('', $idVisiteur, $mois, $libelle, $date->format('Y-m-d'), $montant));
+    }
+
     /**
      * Crée une nouvelle fiche de frais et les lignes de frais au forfait pour un 
      * visiteur et un mois donnés
@@ -219,7 +244,7 @@ class FraisVisiteursController extends Controller {
      */
     public function creerNouvellesLignesFrais($idVisiteur, $mois) {
         $dernierMois = $this->dernierMoisSaisi($idVisiteur);
-        $object = $this->getLesInfosFicheFrais($idVisiteur,$dernierMois);
+        $object = $this->getLesInfosFicheFrais($idVisiteur, $dernierMois);
         if ($object->getIdetat() == 'CR') {
             $this->majEtatFicheFrais($object, 'CL');
         }
@@ -271,8 +296,8 @@ class FraisVisiteursController extends Controller {
         $result = $repo->findOneBy(array('id' => $idVisiteur));
         return $result;
     }
-    
-      private function getEtat($idEtat) {
+
+    private function getEtat($idEtat) {
         $repo = $this->getDoctrine()->getManager()->getRepository('AheGsbBundle:Etat');
         $result = $repo->findOneBy(array('id' => $idEtat));
         return $result;
@@ -308,7 +333,6 @@ class FraisVisiteursController extends Controller {
         return $dernierMois;
     }
 
-    
     public function getLesFraisForfait($idVisiteur, $leMois) {
         $req = "select FraisForfait.id as idFrais, FraisForfait.libelle as libelle, 
 		LigneFraisForfait.quantite as quantite from LigneFraisForfait inner join FraisForfait 
@@ -317,9 +341,9 @@ class FraisVisiteursController extends Controller {
 		order by LigneFraisForfait.idFraisForfait";
         $co = $this->getDoctrine()->getConnection();
         $stmt = $co->prepare($req);
-        $stmt->execute(array($idVisiteur,$leMois));
+        $stmt->execute(array($idVisiteur, $leMois));
         $result = $stmt->fetchAll();
-       
+
         return $result;
     }
 

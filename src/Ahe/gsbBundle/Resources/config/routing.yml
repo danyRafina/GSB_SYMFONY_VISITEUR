@@ -21,10 +21,13 @@ gsb_valide_frais:
     defaults: { _controller:AheGsbBundle:FraisVisiteurs:validerFraisForfait }
 gsb_consultation_frais:
     path: /consultationFrais
-    defaults: { _controller:AheGsbBundle:FraisVisiteurs:consulterFraisForfait }
+    defaults: { _controller:AheGsbBundle:FraisVisiteurs:consulterFrais }
+gsb_update_fhf: 
+    path: /updateFHF
+    defaults: {_controller:AheGsbBundle:FraisVisiteurs:updateFHF }
 gsb_consultation_frais_type:
     path: /consultationFraisType
-    defaults: { _controller:AheGsbBundle:FraisVisiteurs:consulterFicheFrais }
+    defaults: { _controller:AheGsbBundle:FraisVisiteurs:consulterFrais }
 gsb_consultation_Frais_Mois:
     path: /listeFraisForfait
     defaults: { _controller:AheGsbBundle:FraisVisiteurs:listerFraisForfait }

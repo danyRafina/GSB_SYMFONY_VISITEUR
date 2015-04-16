@@ -187,17 +187,19 @@ class appDevUrlMatcher extends Symfony\Bundle\FrameworkBundle\Routing\Redirectab
             return array (  '_controller' => 'Ahe\\gsbBundle\\Controller\\FraisVisiteursController::validerFraisForfaitAction',  '_route' => 'gsb_valide_frais',);
         }
 
-        if (0 === strpos($pathinfo, '/consultationFrais')) {
-            // gsb_consultation_frais
-            if ($pathinfo === '/consultationFrais') {
-                return array (  '_controller' => 'Ahe\\gsbBundle\\Controller\\FraisVisiteursController::consulterFraisForfaitAction',  '_route' => 'gsb_consultation_frais',);
-            }
+        // gsb_consultation_frais
+        if ($pathinfo === '/consultationFrais') {
+            return array (  '_controller' => 'Ahe\\gsbBundle\\Controller\\FraisVisiteursController::consulterFraisAction',  '_route' => 'gsb_consultation_frais',);
+        }
 
-            // gsb_consultation_frais_type
-            if ($pathinfo === '/consultationFraisType') {
-                return array (  '_controller' => 'Ahe\\gsbBundle\\Controller\\FraisVisiteursController::consulterFicheFraisAction',  '_route' => 'gsb_consultation_frais_type',);
-            }
+        // gsb_update_fhf
+        if ($pathinfo === '/updateFHF') {
+            return array (  '_controller' => 'Ahe\\gsbBundle\\Controller\\FraisVisiteursController::updateFHFAction',  '_route' => 'gsb_update_fhf',);
+        }
 
+        // gsb_consultation_frais_type
+        if ($pathinfo === '/consultationFraisType') {
+            return array (  '_controller' => 'Ahe\\gsbBundle\\Controller\\FraisVisiteursController::consulterFraisAction',  '_route' => 'gsb_consultation_frais_type',);
         }
 
         // gsb_consultation_Frais_Mois
