@@ -1,8 +1,6 @@
 <?php
 
 namespace Ahe\gsbBundle\Controller;
-require_once("include/fct.inc.php");
-require_once("include/class.pdogsb.inc.php");
 use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -39,6 +37,7 @@ class DefaultController extends Controller
                         // Fonction définie dans VisiteurRepository.php
                         $visiteur = $repository->findByLoginAndMdp($login,$mdp) ;
                         if ($visiteur === NULL) {
+                      
                             $message = $this->get('session')->getFlashBag()
                                             ->add('erreurLogMdp',"Votre login 
                                                    et/ou votre mot de passe 

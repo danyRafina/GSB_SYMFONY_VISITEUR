@@ -12,7 +12,7 @@ use Doctrine\ORM\EntityRepository;
  */
 class VisiteurRepository extends EntityRepository
 {
-    public function findByLoginAndMdp($login, $mdp) {
+    public function findByLoginAndMdp($login,$mdp) {
         $queryBuilder = $this->createQueryBuilder('unVisiteur') ;
         $queryBuilder-> where('unVisiteur.login = :login') 
                         ->setParameter('login', $login)

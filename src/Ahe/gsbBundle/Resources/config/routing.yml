@@ -1,21 +1,39 @@
 gsb_homepage:
     path:   /index
-    defaults: { _controller: AheGsbBundle:Default:index }
+    defaults: { _controller:AheGsbBundle:Default:index }
 gsb_homepage_visiteurs:
     path:   /indexV
-    defaults: { _controller: AheGsbBundle:FraisVisiteurs:accueilVisiteurs }
+    defaults: { _controller:AheGsbBundle:FraisVisiteurs:accueilVisiteurs }
+gsb_homepage_comptable:
+    path:   /indexC
+    defaults: { _controller:AheGsbBundle:FraisVisiteurs:accueilComptable }
 gsb_saisie_frais:
     path: /saisieFrais
-    defaults: { _controller: AheGsbBundle:FraisVisiteurs:saisirFraisForfait }
+    defaults: { _controller:AheGsbBundle:FraisVisiteurs:saisirFraisForfait }
+gsb_saisie_frais_type:
+    path: /saisieFraisType
+    defaults: { _controller:AheGsbBundle:FraisVisiteurs:saisirFicheFrais }
+gsb_saisie_frais_hf:
+    path: /saisieFraisHorsForfait
+    defaults: { _controller:AheGsbBundle:FraisVisiteurs:saisirFraisForfaitHF }
 gsb_valide_frais:
     path: /valideFrais
-    defaults: { _controller: AheGsbBundle:FraisVisiteurs:validerFraisForfait }
+    defaults: { _controller:AheGsbBundle:FraisVisiteurs:validerFraisForfait }
 gsb_consultation_frais:
     path: /consultationFrais
-    defaults: { _controller: AheGsbBundle:FraisVisiteurs:consulterFraisForfait }
+    defaults: { _controller:AheGsbBundle:FraisVisiteurs:consulterFraisForfait }
+gsb_consultation_frais_type:
+    path: /consultationFraisType
+    defaults: { _controller:AheGsbBundle:FraisVisiteurs:consulterFicheFrais }
 gsb_consultation_Frais_Mois:
     path: /listeFraisForfait
-    defaults: { _controller: AheGsbBundle:FraisVisiteurs:listerFraisForfait }
+    defaults: { _controller:AheGsbBundle:FraisVisiteurs:listerFraisForfait }
 gsb_visiteurs_deconnexion:
     path: /deconnexion
-    defaults: { _controller: AheGsbBundle:Default:seDeconnecter }
+    defaults: { _controller:AheGsbBundle:Default:seDeconnecter }
+gsb_visiteurs_mod_FhF:  
+    path : /modFhF/{id}
+    defaults : { _controller:AheGsbBundle:FraisVisiteurs:modFHF }
+gsb_visiteurs_sup_FhF: 
+    path : /supFhF/{id}
+    defaults : { _controller:AheGsbBundle:FraisVisiteurs:supFHF } 

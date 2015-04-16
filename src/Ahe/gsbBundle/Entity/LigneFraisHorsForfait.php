@@ -8,7 +8,7 @@ use Doctrine\ORM\Mapping as ORM;
  * LigneFraisHorsForfait
  *
  * @ORM\Table(name="LigneFraisHorsForfait", indexes={@ORM\Index(name="idVisiteur", columns={"idVisiteur", "mois"})})
- * @ORM\Entity(repositoryClass="Ahe\gsbBundle\Entity\LigneFraisHorsForfaitRepository.php)
+ * @ORM\Entity(repositoryClass="Ahe\gsbBundle\Entity\LigneFraisHorsForfaitRepository")
  */
 class LigneFraisHorsForfait
 {
@@ -143,7 +143,6 @@ class LigneFraisHorsForfait
     public function setIdVisiteur(\Ahe\gsbBundle\Entity\FicheFrais $idVisiteur = null)
     {
         $this->idVisiteur = $idVisiteur;
-        //return $this;
     }
 
     /**

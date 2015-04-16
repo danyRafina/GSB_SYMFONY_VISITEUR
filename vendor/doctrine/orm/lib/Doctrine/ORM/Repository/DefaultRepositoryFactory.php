@@ -39,7 +39,7 @@ class DefaultRepositoryFactory implements RepositoryFactory
     /**
      * {@inheritdoc}
      */
-    public function getRepository(EntityManagerInterface $entityManager, $entityName)
+    public function getRepository(EntityManagerInterface $entityManager,$entityName)
     {
         $entityName = ltrim($entityName, '\\');
 

@@ -157,11 +157,29 @@ class appDevUrlMatcher extends Symfony\Bundle\FrameworkBundle\Routing\Redirectab
                 return array (  '_controller' => 'Ahe\\gsbBundle\\Controller\\FraisVisiteursController::accueilVisiteursAction',  '_route' => 'gsb_homepage_visiteurs',);
             }
 
+            // gsb_homepage_comptable
+            if ($pathinfo === '/indexC') {
+                return array (  '_controller' => 'Ahe\\gsbBundle\\Controller\\FraisVisiteursController::accueilComptableAction',  '_route' => 'gsb_homepage_comptable',);
+            }
+
         }
 
-        // gsb_saisie_frais
-        if ($pathinfo === '/saisieFrais') {
-            return array (  '_controller' => 'Ahe\\gsbBundle\\Controller\\FraisVisiteursController::saisirFraisForfaitAction',  '_route' => 'gsb_saisie_frais',);
+        if (0 === strpos($pathinfo, '/saisieFrais')) {
+            // gsb_saisie_frais
+            if ($pathinfo === '/saisieFrais') {
+                return array (  '_controller' => 'Ahe\\gsbBundle\\Controller\\FraisVisiteursController::saisirFraisForfaitAction',  '_route' => 'gsb_saisie_frais',);
+            }
+
+            // gsb_saisie_frais_type
+            if ($pathinfo === '/saisieFraisType') {
+                return array (  '_controller' => 'Ahe\\gsbBundle\\Controller\\FraisVisiteursController::saisirFicheFraisAction',  '_route' => 'gsb_saisie_frais_type',);
+            }
+
+            // gsb_saisie_frais_hf
+            if ($pathinfo === '/saisieFraisHorsForfait') {
+                return array (  '_controller' => 'Ahe\\gsbBundle\\Controller\\FraisVisiteursController::saisirFraisForfaitHFAction',  '_route' => 'gsb_saisie_frais_hf',);
+            }
+
         }
 
         // gsb_valide_frais
@@ -169,9 +187,17 @@ class appDevUrlMatcher extends Symfony\Bundle\FrameworkBundle\Routing\Redirectab
             return array (  '_controller' => 'Ahe\\gsbBundle\\Controller\\FraisVisiteursController::validerFraisForfaitAction',  '_route' => 'gsb_valide_frais',);
         }
 
-        // gsb_consultation_frais
-        if ($pathinfo === '/consultationFrais') {
-            return array (  '_controller' => 'Ahe\\gsbBundle\\Controller\\FraisVisiteursController::consulterFraisForfaitAction',  '_route' => 'gsb_consultation_frais',);
+        if (0 === strpos($pathinfo, '/consultationFrais')) {
+            // gsb_consultation_frais
+            if ($pathinfo === '/consultationFrais') {
+                return array (  '_controller' => 'Ahe\\gsbBundle\\Controller\\FraisVisiteursController::consulterFraisForfaitAction',  '_route' => 'gsb_consultation_frais',);
+            }
+
+            // gsb_consultation_frais_type
+            if ($pathinfo === '/consultationFraisType') {
+                return array (  '_controller' => 'Ahe\\gsbBundle\\Controller\\FraisVisiteursController::consulterFicheFraisAction',  '_route' => 'gsb_consultation_frais_type',);
+            }
+
         }
 
         // gsb_consultation_Frais_Mois
@@ -182,6 +208,16 @@ class appDevUrlMatcher extends Symfony\Bundle\FrameworkBundle\Routing\Redirectab
         // gsb_visiteurs_deconnexion
         if ($pathinfo === '/deconnexion') {
             return array (  '_controller' => 'Ahe\\gsbBundle\\Controller\\DefaultController::seDeconnecterAction',  '_route' => 'gsb_visiteurs_deconnexion',);
+        }
+
+        // gsb_visiteurs_mod_FhF
+        if (0 === strpos($pathinfo, '/modFhF') && preg_match('#^/modFhF/(?P<id>[^/]++)$#s', $pathinfo, $matches)) {
+            return $this->mergeDefaults(array_replace($matches, array('_route' => 'gsb_visiteurs_mod_FhF')), array (  '_controller' => 'Ahe\\gsbBundle\\Controller\\FraisVisiteursController::modFHFAction',));
+        }
+
+        // gsb_visiteurs_sup_FhF
+        if (0 === strpos($pathinfo, '/supFhF') && preg_match('#^/supFhF/(?P<id>[^/]++)$#s', $pathinfo, $matches)) {
+            return $this->mergeDefaults(array_replace($matches, array('_route' => 'gsb_visiteurs_sup_FhF')), array (  '_controller' => 'Ahe\\gsbBundle\\Controller\\FraisVisiteursController::supFHFAction',));
         }
 
         // _welcome

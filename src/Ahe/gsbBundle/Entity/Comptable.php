@@ -6,9 +6,9 @@ use Doctrine\ORM\Mapping as ORM;
 
 /**
  * Comptable
- *
+ * @ORM\Entity(repositoryClass="Ahe\gsbBundle\Entity\ComptableRepository")
  * @ORM\Table(name="Comptable")
- * @ORM\Entity(repositoryClass="Ahe\gsbBundle\Entity\ComptableRepository.php")
+ * 
  */
 class Comptable {
 

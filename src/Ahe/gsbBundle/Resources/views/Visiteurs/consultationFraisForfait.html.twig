@@ -48,6 +48,38 @@
             </tr>
             </table>
         </fieldset>
+             <fieldset>
+                    <legend>Frais hors forfait : </legend>
+                    <table border='1' >
+                        <tr>
+                            <th>date </th>
+                            <th> Libéllé</th>
+                            <th>Montant</th>
+                            <th>Action</th>
+                        </tr>
+
+
+                        {% for item in fhf %}
+                            <tr>
+                                <td> {{item['date']}}</td>
+                                <td> {{item['libelle']}}</td>
+                                <td> {{item['montant']}}</td>
+                                <td> 
+                                    <table border="1"> 
+                                        <tr>
+                                            <td>
+                                                <a href="{{ path('gsb_visiteurs_mod_FhF', {'id': item['idVisiteur'] }) }}" accesskey=""title="Déconnexion">Modifier</a>
+                                            </td>
+                                            <td>
+                                                <a href="{{ path('gsb_visiteurs_sup_FhF',{'id': item['idVisiteur'] }) }}" accesskey=""title="Suppression">Supprimer </a>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </td>
+                            <tr>
+                            {%endfor%}
+                    </table>
+                </fieldset>
         <br/>
         <a href="{{ path('gsb_consultation_frais') }}" >
             Autre Fiche

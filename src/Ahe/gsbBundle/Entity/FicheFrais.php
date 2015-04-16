@@ -255,4 +255,9 @@ class FicheFrais
     {
         return $this->idFraisForfait;
     }
+    
+    public function __toString() {
+        return strval($this->nbjustificatifs);
+        
+    }
 }
